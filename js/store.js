@@ -49,35 +49,10 @@ let shopItemsContainer = $.querySelector('.shop-items')
 let bastekProductsContainer = $.querySelector('.cart-items')
 let cartTotalPrice = $.querySelector('.cart-total-price')
 
+let productFragment = document.createDocumentFragment()
+
 products.map(function(product){
-    let newShopItem = $.createElement('div')
-    newShopItem.classList.add('shop-item')
-
-    let newTitle = $.createElement('span')
-    newTitle.classList.add('shop-item-title')
-    newTitle.innerHTML = product.title;
-
-    let newImg = $.createElement('img')
-    newImg.classList.add('shop-item-image')
-    newImg.setAttribute('src', product.img)
-
-    let productDetailContainer = $.createElement('div')
-    productDetailContainer.classList.add('shop-item-details')
-
-    let newPrice = $.createElement('span')
-    newPrice.classList.add('shop-item-price')
-    newPrice.innerHTML = product.price
-
-    let addToCardBtn = $.createElement('button')
-    addToCardBtn.classList.add('btn', 'btn-primary', 'shop-item-button')
-    addToCardBtn.innerHTML = 'ADD TO CART'
-    addToCardBtn.addEventListener('click', function(){
-        addToBasket(product.id)
-    })
-
-    productDetailContainer.append(newPrice, addToCardBtn)
-    newShopItem.append(newTitle, newImg, productDetailContainer)
-    shopItemsContainer.append(newShopItem)
+    shopItemsContainer.insertAdjacentHTML('beforeend', '<div class="shop-items"><div class="shop-item"><span class="shop-item-title">'+ product.title +'</span><img class="shop-item-image" src="'+ product.img +'"><div class="shop-item-details"><span class="shop-item-price">'+ product.price +'</span><button class="btn btn-primary shop-item-button" onclick="addToBasket('+ product.id +')">ADD TO CART</button></div></div></div>')
 })
 
 function addToBasket(productId){
@@ -125,6 +100,7 @@ function basketProductsGenerator (userBasketArray) {
         basketProductInput.className = 'cart-quantity-input'
         basketProductInput.value = product.count
         basketProductInput.setAttribute('type', 'number')
+        basketProductInput.setAttribute('min', '1')
         basketProductInput.addEventListener('change', function(){
             updatedcount(product.id, basketProductInput.value)
         })
@@ -141,9 +117,10 @@ function basketProductsGenerator (userBasketArray) {
 
         basketProductContainer.append(basketProductDetailsContainer, basketProductPriceSpan, basketProductInputsContainer)
 
-        bastekProductsContainer.append(basketProductContainer)
-
+        productFragment.append(basketProductContainer)
+        
     })
+    bastekProductsContainer.append(productFragment)
 }
 
 function removeProductFromBasket(productId){
