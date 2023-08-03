@@ -151,7 +151,7 @@ function removeProductFromBasket(productId){
         return item.id !== productId
     })
     basketProductsGenerator(basket)
-    calcutePrice(basketgit)
+    calcutePrice(basket)
 }
 
 function calcutePrice(arr){
