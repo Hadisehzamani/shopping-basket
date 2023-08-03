@@ -98,7 +98,7 @@ function basketProductsGenerator (userBasketArray) {
 
         let basketProductInput = $.createElement('input')
         basketProductInput.className = 'cart-quantity-input'
-        basketProductInput.value = product.count
+        basketProductInput.value = 1
         basketProductInput.setAttribute('type', 'number')
         basketProductInput.setAttribute('min', '1')
         basketProductInput.addEventListener('change', function(){
@@ -123,13 +123,20 @@ function basketProductsGenerator (userBasketArray) {
     bastekProductsContainer.append(productFragment)
 }
 
-function removeProductFromBasket(productId){
-    basket = basket.filter(function(item){
-        return item.id !== productId
-    })
-    basketProductsGenerator(basket)
-    calcutePrice(basket)
+function removeProductFromBasket(productId) {
+    let removed = false;
+    basket = basket.filter(function(item) {
+        if (!removed && item.id === productId) {
+            removed = true;
+            return false; // Do not include the product in the new array
+        }
+        return true; // Include other products in the new array
+    });
+
+    basketProductsGenerator(basket);
+    calcutePrice(basket);
 }
+
 
 function calcutePrice(arr){
     let totalPrice = 0
